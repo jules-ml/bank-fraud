@@ -32,7 +32,11 @@ query_option = st.sidebar.selectbox(
 # -------------------
 query_map = {
     "Top Failed Logins (7 days)": """
-        SELECT cd.party_id, cd.phone_number, COUNT(*) AS failed_logins
+        SELECT cd.party_id, cd.phone_number, COUNT(*) AS failed_loginsgit config --global user.name “Giulio Piccinonna”
+git config --global user.email "gi081590@ucf.edu"
+
+
+
         FROM customer_data cd
         JOIN login_instance_data lid ON cd.party_id = lid.party_id
         WHERE lid.successful = FALSE AND lid.timestamp >= CURRENT_DATE - INTERVAL 7 DAY
