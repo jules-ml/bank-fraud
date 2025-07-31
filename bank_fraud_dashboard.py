@@ -31,19 +31,16 @@ query_option = st.sidebar.selectbox(
 # SQL Query Definitions
 # -------------------
 query_map = {
-    "Top Failed Logins (7 days)": """
-        SELECT cd.party_id, cd.phone_number, COUNT(*) AS failed_loginsgit config --global user.name “Giulio Piccinonna”
-git config --global user.email "gi081590@ucf.edu"
+"Top Failed Logins (7 days)": """
+    SELECT cd.party_id, cd.phone_number, COUNT(*) AS failed_logins
+    FROM customer_data cd
+    JOIN login_instance_data lid ON cd.party_id = lid.party_id
+    WHERE lid.successful = FALSE AND lid.timestamp >= CURRENT_DATE - INTERVAL 7 DAY
+    GROUP BY cd.party_id, cd.phone_number
+    ORDER BY failed_logins DESC
+    LIMIT 10
+""",
 
-
-
-        FROM customer_data cd
-        JOIN login_instance_data lid ON cd.party_id = lid.party_id
-        WHERE lid.successful = FALSE AND lid.timestamp >= CURRENT_DATE - INTERVAL 7 DAY
-        GROUP BY cd.party_id, cd.phone_number
-        ORDER BY failed_logins DESC
-        LIMIT 10
-    """,
     "Accounts with >5 Failures (1 day)": """
         SELECT cad.account_id, COUNT(*) AS failed_attempts, MAX(lid.timestamp) AS last_failed_attempt
         FROM login_instance_data lid
