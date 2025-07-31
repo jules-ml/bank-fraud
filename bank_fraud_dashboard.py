@@ -35,8 +35,9 @@ query_map = {
     SELECT cd.party_id, cd.phone_number, COUNT(*) AS failed_logins
     FROM customer_data cd
     JOIN login_instance_data lid ON cd.party_id = lid.party_id
-    WHERE lid.successful = FALSE AND lid.timestamp >= CURRENT_DATE - INTERVAL 7 DAY
+    WHERE lid.successful = FALSE AND lid.timestamp >= NOW() - INTERVAL 7 DAY
     GROUP BY cd.party_id, cd.phone_number
+    HAVING COUNT(*) > 1
     ORDER BY failed_logins DESC
     LIMIT 10
 """,
